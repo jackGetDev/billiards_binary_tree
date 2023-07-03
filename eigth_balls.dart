@@ -47,9 +47,7 @@ class BinaryTree {
 }
 
 void main() {
-  runApp(MyApp(
-    
-  ));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -65,51 +63,53 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Binary Tree Billiards Visualization'),
         ),
-        body: Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Binary Tree:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Binary Tree:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              buildBinaryTreeWidget(tree.root),
-              const SizedBox(height: 32),
-              const Text(
-                'In-order Traversal:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 16),
+                buildBinaryTreeWidget(tree.root),
+                const SizedBox(height: 32),
+                const Text(
+                  'In-order Traversal:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              buildTraversalWidget(tree.root, TraversalType.inOrder),
-              const SizedBox(height: 32),
-              const Text(
-                'Pre-order Traversal:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 16),
+                buildTraversalWidget(tree.root, TraversalType.inOrder),
+                const SizedBox(height: 32),
+                const Text(
+                  'Pre-order Traversal:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              buildTraversalWidget(tree.root, TraversalType.preOrder),
-              const SizedBox(height: 32),
-              const Text(
-                'Post-order Traversal:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 16),
+                buildTraversalWidget(tree.root, TraversalType.preOrder),
+                const SizedBox(height: 32),
+                const Text(
+                  'Post-order Traversal:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              buildTraversalWidget(tree.root, TraversalType.postOrder),
-            ],
+                const SizedBox(height: 16),
+                buildTraversalWidget(tree.root, TraversalType.postOrder),
+              ],
+            ),
           ),
         ),
       ),
@@ -128,11 +128,17 @@ class MyApp extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (node.left != null) //buildVerticalLine(),
-            buildBinaryTreeWidget(node.left),
+            if (node.left != null) buildVerticalLine(),
             SizedBox(width: 32),
-            if (node.right != null) //buildVerticalLine(),
-            buildBinaryTreeWidget(node.right),
+            if (node.right != null) buildVerticalLine(),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (node.left != null) buildBinaryTreeWidget(node.left),
+            SizedBox(width: 32),
+            if (node.right != null) buildBinaryTreeWidget(node.right),
           ],
         ),
       ],
@@ -147,46 +153,46 @@ class MyApp extends StatelessWidget {
     );
   }
 
-Widget buildCircleAvatar(int value) {
-  BallColor ballColor = getBallColor(value);
-  Color color = getColorFromBallColor(ballColor);
-  bool isStriped = ballColor.toString().contains('Striped');
+  Widget buildCircleAvatar(int value) {
+    BallColor ballColor = getBallColor(value);
+    Color color = getColorFromBallColor(ballColor);
+    bool isStriped = ballColor.toString().contains('Striped');
 
-  return Stack(
-    alignment: Alignment.center,
-    children: [
-      CircleAvatar(
-        radius: 30,
-        backgroundColor: color,
-      ),
-      if (isStriped)
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.center,
-            child: Container(
-              width: 60,
-              height: 20,
-              decoration: BoxDecoration(
-                color: Colors.yellow,
-                borderRadius: BorderRadius.circular(5),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        CircleAvatar(
+          radius: 30,
+          backgroundColor: color,
+        ),
+        if (isStriped)
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                width: 60,
+                height: 20,
+                decoration: BoxDecoration(
+                  color: Colors.yellow,
+                  borderRadius: BorderRadius.circular(5),
+                ),
               ),
             ),
           ),
-        ),
-      CircleAvatar(
-        radius: 10,
-        backgroundColor: Colors.white,
-        child: Text(
-          value.toString(),
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 15,
+        CircleAvatar(
+          radius: 10,
+          backgroundColor: Colors.white,
+          child: Text(
+            value.toString(),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+            ),
           ),
         ),
-      ),
-    ],
-  );
-}
+      ],
+    );
+  }
 
   Widget buildTraversalWidget(TreeNode? node, TraversalType type) {
     final traversal = performTraversal(node, type);
@@ -264,6 +270,7 @@ Widget buildCircleAvatar(int value) {
     traversal.add(node.value);
   }
 }
+
 enum BallColor {
   YellowSolid,
   RedSolid,
@@ -282,15 +289,14 @@ enum BallColor {
   BurgundyStriped,
 }
 
-
 BallColor getBallColor(int value) {
   switch (value) {
     case 1:
       return BallColor.YellowSolid;
     case 2:
-      return BallColor.RedSolid;
-    case 3:
       return BallColor.BlueSolid;
+    case 3:
+      return BallColor.RedSolid;
     case 4:
       return BallColor.PurpleSolid;
     case 5:
